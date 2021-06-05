@@ -1,6 +1,19 @@
 import argparse
 import numpy as np
 import pandas as pd
+import streamlit as st
+import pydeck as pdk
+from urllib.error import URLError
+import os
+
+@st.cache
+def streamlit():
+    st.write("""
+    # My first app!
+    Hello, world!
+    """)
+
+
 
 if __name__ == '__main':
     print('Entered MAIN')
@@ -17,6 +30,8 @@ if __name__ == '__main':
                              'minimum validation error')
     parser.add_argument('--max-epochs', metavar='MAX_EPOCHS', type=int, default=1000,
                         help='the maximum number of epochs to allow the model to train for')
+    parser.add_argument('--threshold', metavar='THRESHOLD', type=int, default=3)
+    parser.add_argument('--distance-measures', metavar='DISTANCE_MEASURES', type=float, default=1.0 )
 
     args = parser.parse_args()
     algo = args.algo
@@ -25,3 +40,8 @@ if __name__ == '__main':
     use_early_stop = not args.no_early
     max_epochs = args.max_epochs
     early_stop_max_epoch = args.early_stop_max_epoch
+    threshold = args.threshold
+    distance_measures = args.distance_measures
+    streamlit()
+
+
