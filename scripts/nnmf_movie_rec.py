@@ -57,7 +57,7 @@ model = keras.Model([user_input, movie_input], prod)
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
 print(model.summary())
 
-history = model.fit([train.user_id, train.item_id], train.rating, epochs=100, verbose=1)
+history = model.fit([train.user_id, train.item_id], train.rating, epochs=10, verbose=1)
 results = model.evaluate((test.user_id, test.item_id), test.rating, batch_size=1)
 
 movie_embedding_learnt = model.get_layer(name='Movie-Embedding').get_weights()[0]

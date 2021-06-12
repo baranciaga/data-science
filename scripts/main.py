@@ -6,19 +6,10 @@ import pydeck as pdk
 from urllib.error import URLError
 import os
 
-@st.cache
-def streamlit():
-    st.write("""
-    # My first app!
-    Hello, world!
-    """)
-
-
-
 if __name__ == '__main':
     print('Entered MAIN')
     parser = argparse.ArgumentParser(description='Different RecSys algorithms.')
-    parser.add_argument('--algo', metavar='ALGO', type=str, choices=['CF', 'MF'])
+    parser.add_argument('--algo', metavar='ALGO', type=str, choices=['NNMF', 'KNN'])
     parser.add_argument('--delim', metavar='DELIMITER', type=str, default='\t',
                         help='the delimiter to use when parsing input files')
     parser.add_argument('--batch', metavar='BATCH_SIZE', type=int, default=25000,
@@ -42,6 +33,5 @@ if __name__ == '__main':
     early_stop_max_epoch = args.early_stop_max_epoch
     threshold = args.threshold
     distance_measures = args.distance_measures
-    streamlit()
 
 

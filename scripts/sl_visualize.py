@@ -1,5 +1,7 @@
 import streamlit as st
 import yfinance as yf
+
+from nnmf_movie_rec import model
 st.write("""
 # My first app!
 Hello, world!
