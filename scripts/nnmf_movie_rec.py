@@ -32,14 +32,16 @@ with urllib.request.urlopen(datasets[dt]) as response, open('c:/Users/Baran/Pych
     shutil.copyfileobj(response, out_file)
 print('Download completed')
 """
-dataset = pd.read_csv("c:/Users/Baran/PycharmProjects/data-science/data/ml-100k/u.data",sep='\t',names="user_id,item_id,rating,timestamp".split(","))
+print(os.getcwd())
+dataset = pd.read_csv("../data/ml-latest-small/ratings.csv",sep='\t',names="user_id,item_id,rating,timestamp".split(","))
 
-dataset.user_id = dataset.user_id.astype('category').cat.codes.values
-dataset.item_id = dataset.item_id.astype('category').cat.codes.values
+dataset1=pd.read_csv("../data/ml-latest-small/ratings.csv", usecols = ['userId','movieId', 'rating'])
+dataset1.userId = dataset1.userId.astype('category').cat.codes.values
+dataset1.movieId = dataset1.movieId.astype('category').cat.codes.values
 
-train, test = train_test_split(dataset, test_size=0.2)
+train, test = train_test_split(dataset1, test_size=0.2)
 
-n_users, n_movies = len(dataset.user_id.unique()), len(dataset.item_id.unique())
+n_users, n_movies = len(dataset1.userId.unique()), len(dataset1.movieId.unique())
 print(n_users, '\t', n_movies)
 n_latent_factors = 5
 
@@ -57,8 +59,8 @@ model = keras.Model([user_input, movie_input], prod)
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
 print(model.summary())
 
-history = model.fit([train.user_id, train.item_id], train.rating, epochs=10, verbose=1)
-results = model.evaluate((test.user_id, test.item_id), test.rating, batch_size=1)
+history = model.fit([train.userId, train.movieId], train.rating, epochs=10, verbose=1)
+results = model.evaluate((test.userId, test.movieId), test.rating, batch_size=1)
 
 movie_embedding_learnt = model.get_layer(name='Movie-Embedding').get_weights()[0]
 pd.DataFrame(movie_embedding_learnt).describe()

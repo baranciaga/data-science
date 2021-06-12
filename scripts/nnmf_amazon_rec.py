@@ -13,8 +13,7 @@ from keras.layers import Input, Embedding, Flatten, Dot
 from keras.models import Model
 
 print(os.getcwd())
-os.chdir('C:/Users/Baran/PycharmProjects/data-science/')
-df = pd.read_csv('data/ratings_Electronics.csv', header=None, usecols=[0, 1, 2],
+df = pd.read_csv('../data/ratings_amazon.csv', header=None, usecols=[0, 1, 2],
                  names="user_id,item_id,rating".split(","))
 reader = Reader(rating_scale=(1, 5))
 print('!!!')
