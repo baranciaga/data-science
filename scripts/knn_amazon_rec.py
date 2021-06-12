@@ -5,7 +5,7 @@ from surprise import KNNWithMeans
 from surprise.model_selection import train_test_split
 
 # Daten in ein pandas dataframe einlesen, file liegt im Projektordner, header muss erstellt werden weil keine im original file sind
-df = pd.read_csv('../data/ratings_amazon.csv',header = None , usecols = [0,1,2], names=['userId','movieId', 'rating'])
+df = pd.read_csv('../data/ratings_amazon.csv',header = None , usecols = [0,1,2], names=['userId','movieId', 'rating'], nrows = 100000)
 print(df)
 
 # pandas dataframe in ein Surprise data object umwandeln
