@@ -13,9 +13,22 @@ import warnings
 
 import tensorflow as tf
 from tensorflow import keras
-#from keras.optimizers import Adam
+# from keras.optimizers import Adam
 
 warnings.filterwarnings('ignore')
+
+
+def recommend(user_id, number_of_movies=5):
+    """
+    :param user_id: id of the user
+    :param number_of_movies: Number of the movies, default = 5
+    :return: an array of movie IDs recommended for the user
+    """
+    movies = user_embedding_learnt[user_id]@movie_embedding_learnt.T
+    mids = np.argpartition(movies, -number_of_movies)[-number_of_movies:]
+    return mids
+
+
 """
 os.chdir('c:/users/Baran/PycharmProjects/data-science/data')
 datasets = {'ml100k':'http://files.grouplens.org/datasets/movielens/ml-100k.zip',
@@ -33,7 +46,14 @@ with urllib.request.urlopen(datasets[dt]) as response, open('c:/Users/Baran/Pych
 print('Download completed')
 """
 print(os.getcwd())
-dataset = pd.read_csv("../data/ml-latest-small/ratings.csv",sep='\t',names="user_id,item_id,rating,timestamp".split(","))
+dataset = pd.read_csv("../data/ml-100k/u.data",sep='\t',names="user_id,item_id,rating,timestamp".split(","))
+dataset.user_id = dataset.user_id.astype('category').cat.codes.values
+dataset.item_id = dataset.item_id.astype('category').cat.codes.values
+train0, test0 = train_test_split(dataset, test_size=.2)
+n_users, n_movies = len(dataset.user_id.unique()), len(dataset.item_id.unique())
+print('++++')
+print(n_users, '\t', n_movies)
+print('++++')
 
 dataset1=pd.read_csv("../data/ml-latest-small/ratings.csv", usecols = ['userId','movieId', 'rating'])
 dataset1.userId = dataset1.userId.astype('category').cat.codes.values
@@ -59,8 +79,14 @@ model = keras.Model([user_input, movie_input], prod)
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
 print(model.summary())
 
-history = model.fit([train.userId, train.movieId], train.rating, epochs=10, verbose=1)
+history = model.fit([train.userId, train.movieId], train.rating, epochs=1, verbose=1)
 results = model.evaluate((test.userId, test.movieId), test.rating, batch_size=1)
 
 movie_embedding_learnt = model.get_layer(name='Movie-Embedding').get_weights()[0]
-pd.DataFrame(movie_embedding_learnt).describe()
+print(pd.DataFrame(movie_embedding_learnt).describe())
+
+user_embedding_learnt = model.get_layer(name='User-Embedding').get_weights()[0]
+
+print("Recommendation: \n")
+for i in range(n_users):
+    print(recommend(user_id=i))

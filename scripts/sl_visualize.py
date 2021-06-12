@@ -6,10 +6,16 @@ st.write("""
 # My first app!
 Hello, world!
 """)
-number = st.slider("Pick a number", 0, 69,)
-st.write("""
-## PHAM ALTER!!! 
-""")
+
+choice_algo = st.selectbox('Please choose the algorithm:', ('NNMF', 'KNN'))
+st.write("your Choice: ", choice_algo)
+choice_dataset = st.selectbox('Please select the dataset:', ('Amazon reviews', 'Movielens movie reviews'))
+st.write('your choice: ', choice_dataset)
+number = st.slider("Popularity Threshold", 1, 5,)
+st.write("Thresold: ", number)
+
+threshold = st.number_input('Threshold: ', value=.0)
+st.write('Threshold: ', threshold)
 
 ticker_symbol = 'BB'
 
