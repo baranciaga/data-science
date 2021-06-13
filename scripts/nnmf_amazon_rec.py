@@ -7,12 +7,10 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import shutil
 import tensorflow as tf
-print(tf.__version__)
 from tensorflow import keras
 from keras.layers import Input, Embedding, Flatten, Dot
 from keras.models import Model
 
-print(os.getcwd())
 df = pd.read_csv('../data/ratings_amazon.csv', header=None, usecols=[0, 1, 2],
                  names="user_id,item_id,rating".split(","))
 reader = Reader(rating_scale=(1, 5))
@@ -34,15 +32,19 @@ n_latent_factors = 20
 
 
 item_input = Input(shape=[1], name='Item')
-item_embedding = Embedding(n_items+1, n_latent_factors, name='item_embedding')(item_input)
+item_embedding = Embedding(n_items+1, n_latent_factors, name='Item-Embedding')(item_input)
 item_vec = Flatten(name='FlattenItems')(item_embedding)
 
 user_input = Input(shape=[1], name='User')
-user_vec = Flatten(name='FlattenUsers')(Embedding(n_users+1, n_latent_factors, name='user_embedding')(user_input))
+user_vec = Flatten(name='FlattenUsers')(Embedding(n_users+1, n_latent_factors, name='User-Embedding')(user_input))
 
-# prod = Dot([item_vec, user_vec], axes=1,  name='dot_product')
-#model = Model([user_input, item_input], prod)
+prod = keras.layers.dot([item_vec, user_vec], axes=1,  name='DotProduct')
+model = Model([user_input, item_input], prod)
 
-# model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
-# print(model.summary())
+model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
+print(model.summary())
+
+history = model.fit([train.user_id, train.item_id], train.rating, epochs=10, verbose=1)
+results = model.evaluate((test.user_id, test.item_id), test.rating, batch_size=1)
+
 print('EOF')

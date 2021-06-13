@@ -63,7 +63,7 @@ train, test = train_test_split(dataset1, test_size=0.2)
 
 n_users, n_movies = len(dataset1.userId.unique()), len(dataset1.movieId.unique())
 print(n_users, '\t', n_movies)
-n_latent_factors = 5
+n_latent_factors = 20
 
 movie_input = keras.layers.Input(shape=[1], name='Item')
 movie_embedding = keras.layers.Embedding(n_movies + 1, n_latent_factors, name='Movie-Embedding')(movie_input)
