@@ -1,8 +1,5 @@
 import pandas as pd
-from surprise import Dataset
 from surprise import Reader
-# from surprise.model_selection import train_test_split
-import os
 import numpy as np
 from sklearn.model_selection import train_test_split
 import shutil
@@ -12,7 +9,7 @@ from keras.layers import Input, Embedding, Flatten, Dot
 from keras.models import Model
 
 df = pd.read_csv('../data/ratings_amazon.csv', header=None, usecols=[0, 1, 2],
-                 names="user_id,item_id,rating".split(","))
+                 names="user_id,item_id,rating".split(","), nrows=100000)
 reader = Reader(rating_scale=(1, 5))
 print('!!!')
 print(df.head())
@@ -47,4 +44,3 @@ print(model.summary())
 history = model.fit([train.user_id, train.item_id], train.rating, epochs=10, verbose=1)
 results = model.evaluate((test.user_id, test.item_id), test.rating, batch_size=1)
 
-print('EOF')
