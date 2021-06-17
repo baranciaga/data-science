@@ -2,7 +2,7 @@ import streamlit as st
 from knn_movie_rec import apply_kNN_movie, get_top_n
 import pandas as pd
 from utils import load_dataset
-
+from nnmf_movie_rec import run_neural_network
 
 
 def load_movie_titles():
@@ -40,17 +40,18 @@ def main():
             cols = ['userId', 'movieId', 'rating']
 
         df = load_dataset(path=path_to_dataset, cols=cols)
-        st.write(df.shape)
+        st.write("Shape of Data", df.shape)
         st.write(df.head(20))
         # number = st.slider("Popularity Threshold", 1, 5, )
-        threshold = st.slider('Threshold: ', 1, 5)
-        choice_of_k = st.slider("Choose k", 1, 10)
-        choice_of_n = st.slider("How many recommendations do you wanna get?", 1, 10)
-        choice_of_algo = st.selectbox("Which Similarity metric?", ("pearson", "pearson_baseline", "msd", "cosine"))
+        threshold = st.sidebar.slider('Threshold: ', 1, 5)
+        choice_of_k = st.sidebar.slider("Choose k", 1, 10)
+        choice_of_n = st.sidebar.slider("How many recommendations do you wanna get?", 1, 10)
+        choice_of_algo = st.sidebar.selectbox("Which Similarity metric?", ("pearson", "pearson_baseline", "msd", "cosine"))
 
-        if st.button('Run KNN Algo'):
-            result, error = apply_kNN_movie(int(threshold), str(choice_of_algo), int(choice_of_k), int(choice_of_n))
-            get_top_n(result)
+        if st.sidebar.button('Run KNN Algo'):
+            # result, error = apply_kNN_movie(int(threshold), str(choice_of_algo), int(choice_of_k), int(choice_of_n))
+            # get_top_n(result)
+            st.write("Placeholder")
 
     if page_selection == "Neural network matrix factorization":
         choice_dataset = st.selectbox('Please select the dataset:', ('Amazon reviews', 'Movielens movie reviews'))
@@ -63,10 +64,16 @@ def main():
             cols = ['userId', 'movieId', 'rating']
 
         df = load_dataset(path=path_to_dataset, cols=cols)
+        st.write("Shape of Data", df.shape)
         st.write(df.head(20))
-        n_epochs = st.slider('Epochs', 1, 20)
-        choice_metrics = st.selectbox('Which metrics?', ('mae', 'mse'))
-        choice_optimizer = st.selectbox('Optimizer', 'adam')
+        n_epochs = st.sidebar.slider('Epochs', 1, 20)
+        choice_metrics = st.sidebar.selectbox('Which metrics?', ('mae', 'mse'))
+        choice_optimizer = st.sidebar.selectbox('Optimizer', ('adam', 'sgd'))
+        if st.sidebar.button('Run NNMF Algo'):
+            history, results, model = run_neural_network(1)
+            st.write('model: ', model.metrics_names)
+            st.bar_chart(history.history['loss'])
+            st.bar_chart(history.history['mae'])
 
 
 if __name__ == '__main__':

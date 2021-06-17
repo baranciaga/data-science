@@ -56,7 +56,7 @@ def run_neural_network(df):
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
     print(model.summary())
 
-    history = model.fit([train.userId, train.movieId], train.rating, epochs=2, verbose=1)
+    history = model.fit([train.userId, train.movieId], train.rating, epochs=5, verbose=1)
     results = model.evaluate((test.userId, test.movieId), test.rating, batch_size=32)
 
     movie_embedding_learnt = model.get_layer(name='Movie-Embedding').get_weights()[0]
