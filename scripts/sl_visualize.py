@@ -42,7 +42,7 @@ def main():
             apply_kNN_movie(int(threshold), str(choice_of_algo), int(choice_of_k), int(choice_of_n))
 
     if page_selection == "Neural network matrix factorization":
-        print("hello1")
+        print("hello")
 
 
 if __name__ == '__main__':
