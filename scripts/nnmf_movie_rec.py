@@ -53,7 +53,7 @@ def run_neural_network(df):
     n_users, n_movies = len(dataset1.userId.unique()), len(dataset1.movieId.unique())
     print(n_users, '\t', n_movies)
     # number of features. In this case genres, appearing actors etc.
-    n_latent_factors = 20
+    n_latent_factors = 5
 
     # The model: First layer is an input layer with
     movie_input = keras.layers.Input(shape=[1], name='Item')
@@ -75,8 +75,10 @@ def run_neural_network(df):
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
     print(model.summary())
 
+
+
     # training of the model
-    history = model.fit([train.userId, train.movieId], train.rating, epochs=5, verbose=1)
+    history = model.fit([train.userId, train.movieId], train.rating, epochs=20, verbose=1)
     results = model.evaluate((test.userId, test.movieId), test.rating, batch_size=32)
 
     movie_embedding_learnt = model.get_layer(name='Movie-Embedding').get_weights()[0]
@@ -86,6 +88,11 @@ def run_neural_network(df):
     print(pd.DataFrame(user_embedding_learnt).describe())
     print(history.history.keys())
     print(history.history['loss'])
+
+    pd.Series(history.history['loss']).plot(logy=True)
+    plt.xlabel("Epoch")
+    plt.ylabel("Training Error")
+    plt.show()
 
     #
     recommend(movie_embedding_learnt, user_embedding_learnt, user_id=1)
