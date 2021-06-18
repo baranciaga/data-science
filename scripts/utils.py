@@ -22,3 +22,10 @@ def load_movie_titles():
     movie_list = df['title'].to_list()
 
     return movie_list
+
+
+def get_value_counts(dataset1):
+    s = list()
+    s.append(dataset1.rating.value_counts())
+
+    return s

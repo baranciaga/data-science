@@ -1,7 +1,7 @@
 import streamlit as st
 # from knn_movie_rec import apply_kNN_movie, get_top_n
 import pandas as pd
-from utils import load_dataset
+from utils import load_dataset, get_value_counts
 # from nnmf_movie_rec import run_neural_network
 
 
@@ -17,6 +17,7 @@ def main():
     st.write("""
     # Barans and Dungs Recommender
     """)
+
     # Choice of the algo
     page_options = ["K-nearest neighbor", "Neural network matrix factorization"]
     page_selection = st.sidebar.selectbox("Choose Option", page_options)
@@ -32,7 +33,13 @@ def main():
             path_to_dataset = "../data/ml-latest-small/ratings.csv"
             cols = ['userId', 'movieId', 'rating']
 
+
+
         df = load_dataset(path=path_to_dataset, cols=cols)
+
+        s = get_value_counts(df)
+        df = pd.DataFrame(s).T
+        st.bar_chart(df)
 
         #output of data
         st.write("Shape of Data", df.shape)
