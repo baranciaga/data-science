@@ -31,7 +31,7 @@ def get_top_n(predictions, n=10):
 
     return top_n
 
-def apply_kNN_movie (threshold, similarity_metric, user_based, k, n ):
+def apply_kNN_amazon (threshold, similarity_metric, user_based, k, n ):
 
     # Daten in ein pandas dataframe einlesen, file liegt im Projektordner, header muss erstellt werden weil keine im original file sind
     df = pd.read_csv('../data/ratings_amazon.csv',header = None , usecols = [0,1,2], names=['userId','productId', 'rating'], nrows = 100000)
