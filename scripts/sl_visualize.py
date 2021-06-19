@@ -49,7 +49,7 @@ def main():
         threshold = st.sidebar.number_input('Threshold: ', value=1)
         choice_of_k = st.sidebar.number_input("Choose k", value=10)
         choice_of_n = st.sidebar.number_input("How many recommendations do you wanna get?", value=10)
-        choice_of_algo = st.sidebar.selectbox("Which Similarity metric?", ("pearson", "pearson_baseline", "msd", "cosine"))
+        choice_of_algo = st.sidebar.selectbox("Which Similarity metric?", ("pearson", "cosine"))
 
         # button for knn algo
         if st.sidebar.button('Run KNN Algo'):
