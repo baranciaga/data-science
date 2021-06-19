@@ -1,7 +1,7 @@
 import collections
 from collections import defaultdict
 import pandas as pd
-from surprise import Dataset,KNNBaseline, accuracy
+from surprise import Dataset,KNNWithMeans, accuracy
 from surprise import Reader
 from surprise.model_selection import train_test_split, GridSearchCV
 
@@ -59,7 +59,7 @@ def apply_kNN_movie (threshold, similarity_metric, user_based, k, n ):
     }
 
     # definition des algo objekts
-    algo1 = KNNBaseline(k=k,sim_options=sim_options)
+    algo1 = KNNWithMeans(k=k,sim_options=sim_options)
     algo1.fit(x_train)
     # algo testen
     predictions1 = algo1.test(x_test)
