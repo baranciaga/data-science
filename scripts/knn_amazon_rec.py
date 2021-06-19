@@ -70,7 +70,7 @@ def apply_kNN_amazon (threshold, similarity_metric, user_based, k, n ):
 
 '''CF Anwenden mit params. Returnt top_n (die top predicteten ratings zu jeden user) und den error score'''
 #params: threshold, similarity, user_based, k, n
-top_n, error_score = apply_kNN_movie(100, "pearson", False, 1000, 5)
+top_n, error_score = apply_kNN_amazon(100, "pearson", False, 1000, 5)
 
 # Print the recommended items for each user
 for uid, user_ratings in top_n.items():
