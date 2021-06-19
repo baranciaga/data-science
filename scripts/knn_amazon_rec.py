@@ -49,13 +49,12 @@ def apply_kNN_amazon (threshold, similarity_metric, user_based, k, n ):
     # test und trainset erstellen
     x_train, x_test= train_test_split(data, train_size=0.8, test_size= 0.2)
 
-    # To use item-based pearson similarity
     sim_options = {
-        "name": "pearson",
-        "user_based": True,  # Compute  similarities between items
+        "name": similarity_metric,
+        "user_based": user_based,
     }
     # definition des algo objekts
-    algo1 = KNNWithMeans(k=2, sim_options=sim_options)
+    algo1 = KNNWithMeans(k=k, sim_options=sim_options)
 
     # algo trainieren
     algo1.fit(x_train)

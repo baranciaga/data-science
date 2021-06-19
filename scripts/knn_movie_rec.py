@@ -52,7 +52,6 @@ def apply_kNN_movie (threshold, similarity_metric, user_based, k, n ):
     # test und trainset erstellen
     x_train, x_test= train_test_split(data, train_size=0.8, test_size= 0.2)
 
-    # To use item-based pearson similarity
     sim_options = {
         "name": similarity_metric,
         "user_based": user_based,
