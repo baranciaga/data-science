@@ -31,10 +31,10 @@ def get_top_n(predictions, n=10):
 
     return top_n
 
-def apply_kNN_amazon (threshold, similarity_metric, user_based, k, n ):
+def apply_kNN_amazon (threshold, similarity_metric, user_based):
 
     # Daten in ein pandas dataframe einlesen, file liegt im Projektordner, header muss erstellt werden weil keine im original file sind
-    df = pd.read_csv('../data/ratings_amazon.csv',header = None , usecols = [0,1,2], names=['userId','productId', 'rating'], nrows = 100000)
+    df = pd.read_csv('../data/ratings_amazon.csv',header = None , usecols = [0,1,2], names=['userId','productId', 'rating'], nrows = 50000)
     # Tabelle in user-item matrix umwandeln. rows = users, columns = items
     df = df.pivot(index='userId', columns='productId', values='rating')
     # columns rauslöschen, wo Anzahl ratings < thresh
@@ -54,14 +54,14 @@ def apply_kNN_amazon (threshold, similarity_metric, user_based, k, n ):
         "user_based": user_based,
     }
     # definition des algo objekts
-    algo1 = KNNWithMeans(k=k, sim_options=sim_options)
+    algo1 = KNNWithMeans(k=244, sim_options=sim_options)
 
     # algo trainieren
     algo1.fit(x_train)
     # algo testen
     predictions1 = algo1.test(x_test)
     # für jeden user die n items, wo wir predicten dass er sie hoch bewertet, holen
-    top_n = get_top_n(predictions1, n=n)
+    top_n = get_top_n(predictions1, n=5)
     # Evaluations berechnen
     error_score = accuracy.mae(predictions1)
 
@@ -69,12 +69,10 @@ def apply_kNN_amazon (threshold, similarity_metric, user_based, k, n ):
 
 '''CF Anwenden mit params. Returnt top_n (die top predicteten ratings zu jeden user) und den error score'''
 #params: threshold, similarity, user_based, k, n
-top_n, error_score = apply_kNN_amazon(100, "pearson", False, 1000, 5)
+top_n, error_score = apply_kNN_amazon(200, "pearson", False)
 
 # Print the recommended items for each user
 for uid, user_ratings in top_n.items():
     print(uid, [iid for (iid, _) in user_ratings])
 
 print(error_score)
-
-print(top_n[610])

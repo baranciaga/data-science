@@ -33,18 +33,22 @@ def get_top_n(predictions, n=10):
     return top_n
 
 
-def apply_kNN_movie (threshold, similarity_metric, user_based, k, n ):
+def apply_kNN_movie (threshold, similarity_metric, user_based):
     # Daten in ein pandas dataframe einlesen, file liegt im Projektordner
     df = pd.read_csv("../data/ml-latest-small/ratings.csv", usecols = ['userId','movieId', 'rating'])
-
+    print(df)
     #Tabelle in user-item matrix umwandeln. rows = users, columns = items
     df = df.pivot(index = 'userId', columns ='movieId', values = 'rating')
+    print(df)
+
     # columns rauslöschen, wo Anzahl ratings < thresh
     df.dropna(thresh=threshold ,axis=1, inplace=True)
+    print(df)
+
     # Matrix wieder in Tabellenform umwandeln. Table: userId, movieId, ratings sortiert nach userId
     df = df.stack().reset_index().sort_values(by=['userId', 'movieId'], axis=0)
     df.columns = ['userId','movieId', 'rating']
-
+    print(df)
 
     # pandas dataframe in ein Surprise data object umwandeln. nur relevante spalten auswählen
     reader = Reader(rating_scale=(1, 5))
@@ -58,13 +62,13 @@ def apply_kNN_movie (threshold, similarity_metric, user_based, k, n ):
     }
 
     # definition des algo objekts
-    algo1 = KNNWithMeans(k=k,sim_options=sim_options)
+    algo1 = KNNWithMeans(k=316,sim_options=sim_options)
     algo1.fit(x_train)
     # algo testen
     predictions1 = algo1.test(x_test)
 
     #für jeden user die n items, wo wir predicten dass er sie hoch bewertet, holen
-    top_n = get_top_n(predictions1, n=n)
+    top_n = get_top_n(predictions1, n=5)
     # Evaluations berechnen
     error_score = accuracy.mae(predictions1)
 
@@ -73,12 +77,12 @@ def apply_kNN_movie (threshold, similarity_metric, user_based, k, n ):
 
 '''CF Anwenden mit params. Returnt top_n (die top predicteten ratings zu jeden user) und den error score'''
 #params: threshold, similarity, user_based, k, n
-top_n, error_score = apply_kNN_movie(100, "pearson", False, 1000, 5)
+top_n, error_score = apply_kNN_movie(50, "pearson", False)
 
 # Print the recommended items for each user
 for uid, user_ratings in top_n.items():
     print(uid, [iid for (iid, _) in user_ratings])
 
 print(error_score)
-
 print(top_n[610])
+print("x")
