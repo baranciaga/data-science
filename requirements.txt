@@ -113,3 +113,5 @@ Werkzeug==2.0.1
 widgetsnbextension==3.5.1
 wrapt==1.12.1
 yfinance==0.1.59
+
+Keras~=2.4.3

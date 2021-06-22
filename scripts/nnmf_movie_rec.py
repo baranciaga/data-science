@@ -73,7 +73,7 @@ def run_neural_network(df, threshold):
     # compiling the model, specifying the optimizer and the loss function, adam is best for
     # recommender systems usually. See https://ruder.io/optimizing-gradient-descent/
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
-    print(model.summary())
+    # print(model.summary())
 
 
 
@@ -83,12 +83,12 @@ def run_neural_network(df, threshold):
     results = model.evaluate((test.userId, test.movieId), test.rating, batch_size=32)
 
     movie_embedding_learnt = model.get_layer(name='Movie-Embedding').get_weights()[0]
-    print(pd.DataFrame(movie_embedding_learnt).describe())
+    # print(pd.DataFrame(movie_embedding_learnt).describe())
 
     user_embedding_learnt = model.get_layer(name='User-Embedding').get_weights()[0]
-    print(pd.DataFrame(user_embedding_learnt).describe())
-    print(history.history.keys())
-    print(history.history['loss'])
+    # print(pd.DataFrame(user_embedding_learnt).describe())
+    # print(history.history.keys())
+    # print(history.history['loss'])
     """
     pd.Series(history.history['mae']).plot(logy=True)
     pd.Series(history.history['val_mae']).plot(logy=True) # orange
