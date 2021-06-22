@@ -31,6 +31,7 @@ def main():
         # load dataset
         df = load_dataset(path=path_to_dataset, cols=cols)
 
+        # display data
         st.write("Head of dataframe: ")
         st.write(df.head(20))
 
@@ -50,6 +51,10 @@ def main():
         path_to_dataset = "../data/ml-latest-small/ratings.csv"
         cols = ['userId', 'movieId', 'rating']
         df = load_dataset(path=path_to_dataset, cols=cols)
+
+        # display data
+        st.write("Head of dataframe: ")
+        st.write(df.head(20))
 
         # barchart of unique ratings -> variance
         st.write('Number of ratings:')
